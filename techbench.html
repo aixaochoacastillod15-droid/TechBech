@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechBench — Gaming, Alto Rendimiento y Componentes PC | Rubí, Barcelona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#120c1e;
+    --bg-alt:#170f26;
+    --surface:#1e1533;
+    --surface-2:#251a3d;
+    --line: rgba(230,225,245,0.09);
+    --purple:#9161f6;
+    --purple-strong:#7c3aed;
+    --purple-soft: rgba(145,97,246,0.14);
+    --green:#33d9a8;
+    --green-soft: rgba(51,217,168,0.14);
+    --text:#f3f0fa;
+    --text-muted:#a89dc4;
+    --text-dim:#786e97;
+    --radius-s: 4px;
+    --radius-m: 10px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Space Grotesk', sans-serif;
+    margin:0;
+    line-height:1.1;
+    letter-spacing:-0.01em;
+  }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+  a{ color:inherit; }
+  img{max-width:100%;display:block;}
+
+  .wrap{
+    max-width:1120px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  /* ===== Background texture ===== */
+  body{
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(145,97,246,0.16), transparent 40%),
+      radial-gradient(circle at 88% 18%, rgba(51,217,168,0.10), transparent 38%);
+    background-attachment: fixed;
+  }
+
+  /* ===== Header ===== */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(18,12,30,0.86);
+    backdrop-filter: blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 0;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700; font-size:1.25rem;
+    text-decoration:none;
+  }
+  .brand-mark{
+    width:30px;height:30px;border-radius:8px;
+    background:linear-gradient(135deg, var(--purple-strong), var(--green));
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.85rem; font-weight:700; color:#0f0a1a;
+  }
+  nav.links{ display:flex; gap:30px; }
+  nav.links a{
+    text-decoration:none; color:var(--text-muted); font-size:0.93rem;
+    font-weight:500; transition:color .15s ease;
+  }
+  nav.links a:hover{ color:var(--text); }
+  .nav-cta{
+    background:var(--green); color:#0e1a16; padding:10px 18px;
+    border-radius:var(--radius-s); font-weight:600; font-size:0.9rem;
+    text-decoration:none; white-space:nowrap;
+  }
+  .nav-toggle{ display:none; }
+
+  /* ===== Hero ===== */
+  .hero{
+    padding:88px 0 70px;
+    display:grid; grid-template-columns:1.15fr 0.85fr; gap:60px; align-items:center;
+  }
+  .kicker{
+    color:var(--green); font-family:'IBM Plex Mono',monospace; font-size:0.82rem;
+    margin-bottom:18px; display:block;
+  }
+  .hero h1{
+    font-size:clamp(2.2rem, 4.3vw, 3.4rem);
+    font-weight:600;
+    color:var(--text);
+  }
+  .hero h1 em{
+    font-style:normal;
+    background:linear-gradient(90deg, var(--purple), var(--green));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero p.lead{
+    margin-top:22px; font-size:1.08rem; color:var(--text-muted); max-width:46ch;
+  }
+  .hero-ctas{ display:flex; gap:14px; margin-top:34px; flex-wrap:wrap; }
+  .btn{
+    padding:13px 22px; border-radius:var(--radius-s); font-weight:600;
+    font-size:0.95rem; text-decoration:none; display:inline-block;
+    border:1px solid transparent; cursor:pointer; font-family:'Inter',sans-serif;
+    transition:transform .12s ease, background .15s ease;
+  }
+  .btn:active{ transform:scale(0.98); }
+  .btn-primary{ background:var(--purple-strong); color:#fff; }
+  .btn-primary:hover{ background:#8a4ff2; }
+  .btn-ghost{ border-color:var(--line); color:var(--text); background:transparent; }
+  .btn-ghost:hover{ border-color:var(--green); color:var(--green); }
+
+  .hero-panel{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius-m);
+    padding:26px;
+  }
+  .hero-panel h3{ font-size:0.95rem; font-weight:500; color:var(--text-muted); margin-bottom:20px;}
+  .bench-row{ display:flex; align-items:center; gap:14px; margin-bottom:16px; }
+  .bench-row:last-child{ margin-bottom:0; }
+  .bench-label{ width:64px; font-family:'IBM Plex Mono',monospace; font-size:0.78rem; color:var(--text-muted); }
+  .bench-track{ flex:1; height:9px; border-radius:5px; background:var(--bg-alt); overflow:hidden; }
+  .bench-fill{ height:100%; border-radius:5px; }
+  .bench-value{ width:52px; text-align:right; font-family:'IBM Plex Mono',monospace; font-size:0.78rem; color:var(--text); }
+
+  /* ===== Section shell ===== */
+  section{ padding:70px 0; border-top:1px solid var(--line); }
+  .section-head{ max-width:620px; margin-bottom:44px; }
+  .section-head .kicker{ margin-bottom:12px; }
+  .section-head h2{ font-size:clamp(1.6rem,2.6vw,2.2rem); font-weight:600; }
+  .section-head p{ color:var(--text-muted); margin-top:14px; font-size:1rem; }
+
+  /* ===== About / value prop ===== */
+  .about-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:start;
+  }
+  .about-grid p{ color:var(--text-muted); font-size:1.02rem; }
+  .about-grid p + p{ margin-top:16px; }
+  .feature-list{ list-style:none; padding:0; margin:0; }
+  .feature-list li{
+    display:flex; gap:14px; padding:16px 0; border-top:1px solid var(--line);
+  }
+  .feature-list li:first-child{ border-top:none; }
+  .feature-dot{
+    width:8px; height:8px; border-radius:50%; margin-top:8px; flex-shrink:0;
+    background:var(--green);
+  }
+  .feature-list li:nth-child(2) .feature-dot{ background:var(--purple); }
+  .feature-list li:nth-child(3) .feature-dot{ background:var(--green); }
+  .feature-list strong{ display:block; font-size:0.98rem; margin-bottom:3px; }
+  .feature-list span{ color:var(--text-muted); font-size:0.92rem; }
+
+  /* ===== Bancos de prueba ===== */
+  .tiers{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  .tier-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-m);
+    padding:26px; display:flex; flex-direction:column; gap:18px;
+  }
+  .tier-card.mid{ border-color:rgba(145,97,246,0.35); }
+  .tier-card.high{
+    border-color:rgba(51,217,168,0.4);
+    background:linear-gradient(180deg, var(--surface-2), var(--surface));
+  }
+  .tier-top{ display:flex; justify-content:space-between; align-items:flex-start; }
+  .tier-name{ font-family:'Space Grotesk',sans-serif; font-size:1.15rem; font-weight:600; }
+  .tier-meter{ display:flex; gap:3px; align-items:flex-end; height:26px; }
+  .tier-meter i{ width:5px; border-radius:2px; background:var(--line); display:block; }
+  .tier-card .tier-meter i{ height:40%; }
+  .tier-card.low .tier-meter i:nth-child(1){ background:var(--green); height:40%; }
+  .tier-card.mid .tier-meter i:nth-child(1),
+  .tier-card.mid .tier-meter i:nth-child(2){ background:var(--purple); }
+  .tier-card.mid .tier-meter i:nth-child(1){ height:55%; }
+  .tier-card.mid .tier-meter i:nth-child(2){ height:75%; }
+  .tier-card.high .tier-meter i:nth-child(1){ background:var(--green); height:55%; }
+  .tier-card.high .tier-meter i:nth-child(2){ background:var(--purple); height:78%; }
+  .tier-card.high .tier-meter i:nth-child(3){ background:var(--green); height:100%; }
+
+  .tier-desc{ color:var(--text-muted); font-size:0.92rem; }
+  .tier-specs{ list-style:none; padding:0; margin:0; font-family:'IBM Plex Mono',monospace; font-size:0.82rem; color:var(--text); border-top:1px solid var(--line); padding-top:16px; }
+  .tier-specs li{ display:flex; justify-content:space-between; padding:5px 0; }
+  .tier-specs li span:first-child{ color:var(--text-dim); }
+  .tier-foot{ margin-top:auto; font-size:0.85rem; color:var(--text-muted); }
+
+  /* ===== Forms ===== */
+  .form-section{ background:var(--bg-alt); }
+  .split{ display:grid; grid-template-columns:0.85fr 1.15fr; gap:56px; align-items:start; }
+  .form-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-m);
+    padding:30px;
+  }
+  .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .field{ margin-bottom:18px; }
+  .field label{ display:block; font-size:0.85rem; color:var(--text-muted); margin-bottom:7px; }
+  .field input, .field select, .field textarea{
+    width:100%; background:var(--bg-alt); border:1px solid var(--line);
+    border-radius:var(--radius-s); padding:11px 13px; color:var(--text);
+    font-family:'Inter',sans-serif; font-size:0.92rem;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline:2px solid var(--purple); outline-offset:1px; border-color:transparent;
+  }
+  .field textarea{ resize:vertical; min-height:90px; }
+  .submit-row{ display:flex; align-items:center; gap:16px; margin-top:6px; }
+  .form-note{ font-size:0.82rem; color:var(--text-dim); }
+  .confirm-msg{
+    display:none; margin-top:16px; padding:13px 16px; border-radius:var(--radius-s);
+    background:var(--green-soft); border:1px solid rgba(51,217,168,0.4);
+    color:var(--green); font-size:0.88rem;
+  }
+  .confirm-msg.show{ display:block; }
+
+  .aside-block{ padding-top:4px; }
+  .aside-block h3{ font-size:1.3rem; font-weight:600; margin-bottom:14px; }
+  .aside-block p{ color:var(--text-muted); font-size:0.97rem; }
+  .aside-list{ list-style:none; padding:0; margin:24px 0 0; }
+  .aside-list li{ display:flex; gap:12px; padding:12px 0; border-top:1px solid var(--line); font-size:0.9rem; color:var(--text-muted); }
+  .aside-list li:first-child{ border-top:none; }
+  .aside-list b{ color:var(--text); }
+
+  /* ===== Contact ===== */
+  .contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:50px; }
+  .contact-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-m);
+    padding:28px;
+  }
+  .contact-row{ display:flex; gap:14px; padding:15px 0; border-top:1px solid var(--line); }
+  .contact-row:first-child{ border-top:none; padding-top:0; }
+  .contact-row b{ display:block; font-size:0.92rem; }
+  .contact-row span{ color:var(--text-muted); font-size:0.88rem; }
+  .contact-row a.email-link{ color:var(--green); text-decoration:none; }
+  .contact-row a.email-link:hover{ text-decoration:underline; }
+  .map-wrap{ border-radius:var(--radius-m); overflow:hidden; border:1px solid var(--line); height:100%; min-height:280px; }
+  .map-wrap iframe{ width:100%; height:100%; border:0; filter:grayscale(0.3) invert(0.92) contrast(0.9); min-height:280px; }
+
+  footer{
+    border-top:1px solid var(--line); padding:34px 0; margin-top:0;
+  }
+  .foot-row{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
+  .foot-row .brand{ font-size:1rem; }
+  footer .fine{ color:var(--text-dim); font-size:0.82rem; }
+
+  @media (max-width: 880px){
+    .hero{ grid-template-columns:1fr; padding-top:50px; }
+    .about-grid{ grid-template-columns:1fr; }
+    .tiers{ grid-template-columns:1fr; }
+    .split{ grid-template-columns:1fr; }
+    .contact-grid{ grid-template-columns:1fr; }
+    .field-row{ grid-template-columns:1fr; }
+    nav.links{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#top" class="brand">
+      <span class="brand-mark">TB</span>
+      TechBench
+    </a>
+    <nav class="links">
+      <a href="#showroom">Showroom</a>
+      <a href="#bancos">Bancos de prueba</a>
+      <a href="#cita">Reserva tu cita</a>
+      <a href="#a-medida">PC a medida</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <a href="#cita" class="nav-cta">Reservar visita</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <div class="wrap hero">
+    <div>
+      <span class="kicker">RUBÍ, BARCELONA · SHOWROOM Y TIENDA ONLINE</span>
+      <h1>Prueba el rendimiento antes de <em>llevártelo a casa</em>.</h1>
+      <p class="lead">Componentes de PC, gaming y alto rendimiento con un showroom físico donde tocas, enciendes y comparas cada configuración en nuestros bancos de prueba, antes de decidir.</p>
+      <div class="hero-ctas">
+        <a href="#cita" class="btn btn-primary">Reservar una cita</a>
+        <a href="#a-medida" class="btn btn-ghost">Pedir un PC a medida</a>
+      </div>
+    </div>
+    <div class="hero-panel">
+      <h3>FPS medios · Cyberpunk 2077, 1440p Ultra</h3>
+      <div class="bench-row">
+        <span class="bench-label">Gama baja</span>
+        <div class="bench-track"><div class="bench-fill" style="width:32%; background:var(--green);"></div></div>
+        <span class="bench-value">48 fps</span>
+      </div>
+      <div class="bench-row">
+        <span class="bench-label">Gama media</span>
+        <div class="bench-track"><div class="bench-fill" style="width:64%; background:var(--purple);"></div></div>
+        <span class="bench-value">97 fps</span>
+      </div>
+      <div class="bench-row">
+        <span class="bench-label">Gama alta</span>
+        <div class="bench-track"><div class="bench-fill" style="width:96%; background:linear-gradient(90deg, var(--purple), var(--green));"></div></div>
+        <span class="bench-value">144 fps</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT / SHOWROOM -->
+  <section id="showroom">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">CÓMO TRABAJAMOS</span>
+        <h2>Una tienda online, un showroom real.</h2>
+        <p>Elegir componentes por catálogo tiene un límite: no sabes cómo suena esa fuente, cómo se ve esa iluminación o cuántos fotogramas gana realmente esa gráfica. Por eso montamos un espacio físico en Rubí donde esa decisión se toma con datos, no con folletos.</p>
+      </div>
+      <div class="about-grid">
+        <ul class="feature-list">
+          <li>
+            <span class="feature-dot"></span>
+            <div>
+              <strong>Catálogo completo online</strong>
+              <span>Componentes, periféricos y equipos montados, con stock y precio siempre actualizados.</span>
+            </div>
+          </li>
+          <li>
+            <span class="feature-dot"></span>
+            <div>
+              <strong>Showroom en Rubí</strong>
+              <span>Visita el local, ve los productos en persona y resuelve dudas con el equipo técnico cara a cara.</span>
+            </div>
+          </li>
+          <li>
+            <span class="feature-dot"></span>
+            <div>
+              <strong>Bancos de prueba reales</strong>
+              <span>Tres configuraciones activas para comparar rendimiento antes de comprar, sin simulaciones.</span>
+            </div>
+          </li>
+        </ul>
+        <div>
+          <p>Cada banco de pruebas corre los mismos juegos y aplicaciones de referencia, así que las comparaciones que ves en el showroom son reales, no cifras de una ficha técnica genérica.</p>
+          <p>Si vienes con una duda concreta —¿esta grafica calienta demasiado en una torre pequeña?, ¿se nota la diferencia entre estos dos procesadores en mis juegos?— aquí la resolvemos con el equipo encendido delante tuyo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANCOS DE PRUEBA -->
+  <section id="bancos">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">TRES NIVELES, UN MISMO CRITERIO</span>
+        <h2>Bancos de prueba por nivel de rendimiento</h2>
+        <p>Cada banco está montado y calibrado para su franja de uso, desde juego fluido en 1080p hasta 4K con trazado de rayos exigente.</p>
+      </div>
+      <div class="tiers">
+
+        <div class="tier-card low">
+          <div class="tier-top">
+            <span class="tier-name">Gama baja</span>
+            <div class="tier-meter"><i></i><i></i><i></i></div>
+          </div>
+          <p class="tier-desc">Pensado para 1080p estable y esports, con un consumo y un precio contenidos.</p>
+          <ul class="tier-specs">
+            <li><span>CPU</span><span>6 núcleos gama media</span></li>
+            <li><span>GPU</span><span>8 GB VRAM</span></li>
+            <li><span>RAM</span><span>16 GB DDR5</span></li>
+            <li><span>Objetivo</span><span>1080p / 60+ fps</span></li>
+          </ul>
+          <p class="tier-foot">Ideal para probar el salto desde un equipo de entrada.</p>
+        </div>
+
+        <div class="tier-card mid">
+          <div class="tier-top">
+            <span class="tier-name">Gama media</span>
+            <div class="tier-meter"><i></i><i></i><i></i></div>
+          </div>
+          <p class="tier-desc">El equilibrio que más se lleva: 1440p con detalles altos en la mayoría de títulos actuales.</p>
+          <ul class="tier-specs">
+            <li><span>CPU</span><span>8 núcleos gama alta</span></li>
+            <li><span>GPU</span><span>12 GB VRAM</span></li>
+            <li><span>RAM</span><span>32 GB DDR5</span></li>
+            <li><span>Objetivo</span><span>1440p / 100+ fps</span></li>
+          </ul>
+          <p class="tier-foot">El punto de partida recomendado si dudas por dónde empezar.</p>
+        </div>
+
+        <div class="tier-card high">
+          <div class="tier-top">
+            <span class="tier-name">Gama alta</span>
+            <div class="tier-meter"><i></i><i></i><i></i></div>
+          </div>
+          <p class="tier-desc">4K, trazado de rayos activado y sin concesiones, con refrigeración por líquido.</p>
+          <ul class="tier-specs">
+            <li><span>CPU</span><span>Gama entusiasta</span></li>
+            <li><span>GPU</span><span>24 GB VRAM</span></li>
+            <li><span>RAM</span><span>64 GB DDR5</span></li>
+            <li><span>Objetivo</span><span>4K / ray tracing</span></li>
+          </ul>
+          <p class="tier-foot">El banco que reservan quienes ya saben lo que quieren y buscan confirmarlo.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- RESERVA DE CITA -->
+  <section id="cita" class="form-section">
+    <div class="wrap">
+      <div class="split">
+        <div class="aside-block">
+          <span class="kicker">SHOWROOM · RUBÍ</span>
+          <h3>Reserva tu visita al showroom</h3>
+          <p>Elige un banco de pruebas, un día y una franja horaria. Te confirmamos por correo y, el día de tu cita, tienes el equipo encendido y preparado esperándote.</p>
+          <ul class="aside-list">
+            <li><b>15–20 min</b>&nbsp;por franja, sin coste ni compromiso.</li>
+            <li><b>Equipo técnico</b>&nbsp;disponible para resolver dudas en el momento.</li>
+            <li><b>Horario</b>&nbsp;de martes a sábado, mañana y tarde.</li>
+          </ul>
+        </div>
+        <div class="form-card">
+          <form id="citaForm" novalidate>
+            <div class="field-row">
+              <div class="field">
+                <label for="cita-nombre">Nombre</label>
+                <input type="text" id="cita-nombre" required>
+              </div>
+              <div class="field">
+                <label for="cita-email">Correo electrónico</label>
+                <input type="email" id="cita-email" required>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="cita-telefono">Teléfono</label>
+                <input type="tel" id="cita-telefono">
+              </div>
+              <div class="field">
+                <label for="cita-banco">Banco de prueba</label>
+                <select id="cita-banco">
+                  <option>Gama baja</option>
+                  <option>Gama media</option>
+                  <option>Gama alta</option>
+                  <option>No lo tengo claro todavía</option>
+                </select>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="cita-fecha">Fecha preferida</label>
+                <input type="date" id="cita-fecha">
+              </div>
+              <div class="field">
+                <label for="cita-hora">Franja horaria</label>
+                <select id="cita-hora">
+                  <option>Mañana (10:00–14:00)</option>
+                  <option>Tarde (17:00–20:00)</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="cita-msg">Cuéntanos qué quieres probar (opcional)</label>
+              <textarea id="cita-msg" placeholder="Ej: comparar dos gráficas para 1440p"></textarea>
+            </div>
+            <div class="submit-row">
+              <button type="submit" class="btn btn-primary">Confirmar reserva</button>
+              <span class="form-note">Te escribimos a techbech@mundo.gaming.com si necesitamos concretar algo.</span>
+            </div>
+            <div class="confirm-msg" id="citaConfirm">Solicitud registrada. Revisa tu correo: te confirmaremos la cita en breve.</div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PC A MEDIDA -->
+  <section id="a-medida">
+    <div class="wrap">
+      <div class="split">
+        <div class="aside-block">
+          <span class="kicker">CONFIGURACIÓN A MEDIDA</span>
+          <h3>Pide un PC diseñado para tu uso</h3>
+          <p>Dinos qué vas a hacer con el equipo y qué presupuesto manejas. Nuestro equipo técnico te propone una configuración concreta, con piezas compatibles entre sí y probadas en el showroom.</p>
+          <ul class="aside-list">
+            <li><b>Propuesta en 48h</b>&nbsp;con lista de componentes y precio cerrado.</li>
+            <li><b>Montaje incluido</b>&nbsp;y cableado ordenado, listo para encender.</li>
+            <li><b>Puedes verlo antes</b>&nbsp;de comprar, en un banco de prueba similar.</li>
+          </ul>
+        </div>
+        <div class="form-card">
+          <form id="medidaForm" novalidate>
+            <div class="field-row">
+              <div class="field">
+                <label for="m-nombre">Nombre</label>
+                <input type="text" id="m-nombre" required>
+              </div>
+              <div class="field">
+                <label for="m-email">Correo electrónico</label>
+                <input type="email" id="m-email" required>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="m-uso">Uso principal</label>
+                <select id="m-uso">
+                  <option>Gaming competitivo</option>
+                  <option>Gaming en 4K / single player</option>
+                  <option>Streaming y creación de contenido</option>
+                  <option>Edición de vídeo / 3D</option>
+                  <option>Trabajo e IA / cálculo</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="m-presupuesto">Presupuesto aproximado</label>
+                <select id="m-presupuesto">
+                  <option>Menos de 900 €</option>
+                  <option>900 € – 1.500 €</option>
+                  <option>1.500 € – 2.500 €</option>
+                  <option>Más de 2.500 €</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="m-componentes">Componentes o marcas que ya tienes claros (opcional)</label>
+              <input type="text" id="m-componentes" placeholder="Ej: quiero mantener mi caja actual, prefiero AMD...">
+            </div>
+            <div class="field">
+              <label for="m-msg">Cuéntanos más sobre lo que necesitas</label>
+              <textarea id="m-msg" placeholder="Juegos o programas que vas a usar, tamaño de caja, si necesitas monitor..."></textarea>
+            </div>
+            <div class="submit-row">
+              <button type="submit" class="btn btn-primary">Enviar solicitud</button>
+              <span class="form-note">Respondemos desde techbech@mundo.gaming.com</span>
+            </div>
+            <div class="confirm-msg" id="medidaConfirm">Solicitud recibida. Nuestro equipo técnico prepara tu propuesta de configuración.</div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">VISÍTANOS O ESCRÍBENOS</span>
+        <h2>Contacto y ubicación</h2>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <div class="contact-row">
+            <div>
+              <b>Showroom TechBench</b>
+              <span>Rubí, Barcelona</span>
+            </div>
+          </div>
+          <div class="contact-row">
+            <div>
+              <b>Correo electrónico</b>
+              <span><a class="email-link" href="mailto:techbech@mundo.gaming.com">techbech@mundo.gaming.com</a></span>
+            </div>
+          </div>
+          <div class="contact-row">
+            <div>
+              <b>Horario del showroom</b>
+              <span>Martes a sábado, 10:00–14:00 y 17:00–20:00</span>
+            </div>
+          </div>
+          <div class="contact-row">
+            <div>
+              <b>Tienda online</b>
+              <span>Catálogo y pedidos disponibles 24/7</span>
+            </div>
+          </div>
+        </div>
+        <div class="map-wrap">
+          <iframe title="Mapa de Rubí, Barcelona" loading="lazy"
+            src="https://www.openstreetmap.org/export/embed.html?bbox=2.0164%2C41.4832%2C2.0564%2C41.5032&layer=mapnik&marker=41.4932,2.0364">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-row">
+    <span class="brand"><span class="brand-mark">TB</span>TechBench</span>
+    <span class="fine">© 2026 TechBench · Rubí, Barcelona · techbech@mundo.gaming.com</span>
+  </div>
+</footer>
+
+<script>
+  function handleFormSubmit(formId, confirmId){
+    const form = document.getElementById(formId);
+    const confirmBox = document.getElementById(confirmId);
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      if(!form.checkValidity()){
+        form.reportValidity();
+        return;
+      }
+      confirmBox.classList.add('show');
+      confirmBox.scrollIntoView({behavior:'smooth', block:'nearest'});
+    });
+  }
+  handleFormSubmit('citaForm', 'citaConfirm');
+  handleFormSubmit('medidaForm', 'medidaConfirm');
+</script>
+
+</body>
+</html>
